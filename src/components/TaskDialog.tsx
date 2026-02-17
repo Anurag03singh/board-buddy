@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { logActivity } from "@/lib/supabase-helpers";
+import TaskAssignments from "@/components/TaskAssignments";
 import {
   Dialog,
   DialogContent,
@@ -140,6 +141,12 @@ export default function TaskDialog({
               <Input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
             </div>
           </div>
+          {task && (
+            <div className="space-y-2">
+              <Label>Assigned To</Label>
+              <TaskAssignments taskId={task.id} boardId={boardId} />
+            </div>
+          )}
           <div className="flex gap-2">
             <Button onClick={handleSave} disabled={loading || !title.trim()} className="flex-1">
               {task ? "Update" : "Create"}

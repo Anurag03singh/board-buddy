@@ -1,6 +1,7 @@
 import { Draggable } from "@hello-pangea/dnd";
 import { Calendar, User, GripVertical } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface TaskCardProps {
   task: {
@@ -20,6 +21,18 @@ const priorityStyles: Record<string, string> = {
   low: "bg-success/15 text-success border-success/30",
   medium: "bg-warning/15 text-warning border-warning/30",
   high: "bg-destructive/15 text-destructive border-destructive/30",
+};
+
+const getInitials = (name: string | null, email: string) => {
+  if (name) {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  }
+  return email[0].toUpperCase();
 };
 
 export default function TaskCard({ task, index, onClick, assignees = [] }: TaskCardProps) {
@@ -59,10 +72,22 @@ export default function TaskCard({ task, index, onClick, assignees = [] }: TaskC
                   </span>
                 )}
                 {assignees.length > 0 && (
-                  <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                    <User className="h-3 w-3" />
-                    {assignees.length}
-                  </span>
+                  <div className="flex items-center gap-1">
+                    <div className="flex -space-x-1">
+                      {assignees.slice(0, 3).map((assignee, idx) => (
+                        <Avatar key={idx} className="h-5 w-5 border-2 border-card">
+                          <AvatarFallback className="text-[8px]">
+                            {getInitials(assignee.display_name, assignee.email)}
+                          </AvatarFallback>
+                        </Avatar>
+                      ))}
+                    </div>
+                    {assignees.length > 3 && (
+                      <span className="text-[10px] text-muted-foreground">
+                        +{assignees.length - 3}
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             </div>

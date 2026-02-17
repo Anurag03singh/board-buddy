@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,10 +6,20 @@ import { useAuth } from "@/contexts/AuthContext";
 import { logActivity } from "@/lib/supabase-helpers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, ArrowLeft, Search, MoreHorizontal, Trash2 } from "lucide-react";
+import {
+  Plus,
+  ArrowLeft,
+  Search,
+  MoreHorizontal,
+  Trash2,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import TaskCard from "@/components/TaskCard";
 import TaskDialog from "@/components/TaskDialog";
 import ActivityPanel from "@/components/ActivityPanel";
+import BoardMembers from "@/components/BoardMembers";
+import Notifications from "@/components/Notifications";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,10 +33,16 @@ export default function BoardView() {
   const [board, setBoard] = useState<any>(null);
   const [lists, setLists] = useState<any[]>([]);
   const [tasks, setTasks] = useState<any[]>([]);
+  const [taskAssignees, setTaskAssignees] = useState<Record<string, any[]>>({});
   const [search, setSearch] = useState("");
   const [showActivity, setShowActivity] = useState(true);
   const [newListTitle, setNewListTitle] = useState("");
   const [addingList, setAddingList] = useState(false);
+
+  // Horizontal scroll ref
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
   // Task dialog state
   const [taskDialogOpen, setTaskDialogOpen] = useState(false);
@@ -42,12 +58,103 @@ export default function BoardView() {
     ]);
     if (boardRes.data) setBoard(boardRes.data);
     if (listsRes.data) setLists(listsRes.data);
-    if (tasksRes.data) setTasks(tasksRes.data);
+    if (tasksRes.data) {
+      setTasks(tasksRes.data);
+      
+      // Fetch assignees for all tasks
+      const taskIds = tasksRes.data.map((t) => t.id);
+      if (taskIds.length > 0) {
+        const { data: assignments } = await supabase
+          .from("task_assignments")
+          .select("task_id, user_id")
+          .in("task_id", taskIds);
+
+        if (assignments && assignments.length > 0) {
+          const userIds = [...new Set(assignments.map((a) => a.user_id))];
+          const { data: profiles } = await supabase
+            .from("profiles")
+            .select("user_id, display_name, email")
+            .in("user_id", userIds);
+
+          const assigneeMap: Record<string, any[]> = {};
+          assignments.forEach((a) => {
+            if (!assigneeMap[a.task_id]) assigneeMap[a.task_id] = [];
+            const profile = profiles?.find((p) => p.user_id === a.user_id);
+            if (profile) assigneeMap[a.task_id].push(profile);
+          });
+          setTaskAssignees(assigneeMap);
+        } else {
+          setTaskAssignees({});
+        }
+      }
+    }
   }, [boardId]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  // Update scroll button visibility
+  useEffect(() => {
+    const updateScrollButtons = () => {
+      if (scrollContainerRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } =
+          scrollContainerRef.current;
+        setCanScrollLeft(scrollLeft > 0);
+        setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+      }
+    };
+
+    const container = scrollContainerRef.current;
+    if (container) {
+      updateScrollButtons();
+      container.addEventListener("scroll", updateScrollButtons);
+      window.addEventListener("resize", updateScrollButtons);
+
+      return () => {
+        container.removeEventListener("scroll", updateScrollButtons);
+        window.removeEventListener("resize", updateScrollButtons);
+      };
+    }
+  }, [lists, tasks]);
+
+  // Keyboard shortcuts for scrolling
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Arrow keys for scrolling (when not in input)
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      ) {
+        return;
+      }
+
+      if (e.key === "ArrowLeft" && e.shiftKey) {
+        e.preventDefault();
+        scroll("left");
+      } else if (e.key === "ArrowRight" && e.shiftKey) {
+        e.preventDefault();
+        scroll("right");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 400;
+      const newScrollLeft =
+        scrollContainerRef.current.scrollLeft +
+        (direction === "left" ? -scrollAmount : scrollAmount);
+
+      scrollContainerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: "smooth",
+      });
+    }
+  };
 
   // Realtime subscription
   useEffect(() => {
@@ -183,6 +290,12 @@ export default function BoardView() {
               className="pl-9 w-[180px] h-8 text-sm"
             />
           </div>
+          <BoardMembers
+            boardId={boardId}
+            isOwner={board.owner_id === user?.id}
+            ownerId={board.owner_id}
+          />
+          <Notifications />
           <Button
             variant={showActivity ? "secondary" : "ghost"}
             size="sm"
@@ -194,9 +307,41 @@ export default function BoardView() {
       </header>
 
       {/* Board content */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Left Scroll Button */}
+        {canScrollLeft && (
+          <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-2 bg-gradient-to-r from-background to-transparent pointer-events-none">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => scroll("left")}
+              className="pointer-events-auto shadow-lg bg-white hover:bg-zinc-100 border-zinc-300"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+          </div>
+        )}
+
+        {/* Right Scroll Button */}
+        {canScrollRight && (
+          <div className="absolute right-0 top-0 bottom-0 z-20 flex items-center pr-2 bg-gradient-to-l from-background to-transparent pointer-events-none">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => scroll("right")}
+              className="pointer-events-auto shadow-lg bg-white hover:bg-zinc-100 border-zinc-300"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </Button>
+          </div>
+        )}
+
         <DragDropContext onDragEnd={onDragEnd}>
-          <div className="flex-1 overflow-x-auto">
+          <div
+            ref={scrollContainerRef}
+            className="flex-1 overflow-x-auto overflow-y-hidden board-scroll"
+            style={{ scrollbarWidth: "thin" }}
+          >
             <div className="flex gap-4 p-4 h-full">
               {lists.map((list) => {
                 const listTasks = filteredTasks
@@ -268,6 +413,7 @@ export default function BoardView() {
                                 setSelectedListId(list.id);
                                 setTaskDialogOpen(true);
                               }}
+                              assignees={taskAssignees[task.id] || []}
                             />
                           ))}
                           {provided.placeholder}
