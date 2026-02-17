@@ -116,7 +116,33 @@ export default function Boards() {
   );
 
   return (
-    <div className="min-h-screen bg-zinc-100 noise-bg">
+    <div className="min-h-screen bg-zinc-100 noise-bg relative overflow-hidden">
+      {/* Animated Background Squares */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Floating animated squares with borders */}
+        <div className="absolute top-32 left-1/4 w-12 h-12 border-2 border-zinc-400 rotate-45 animate-float opacity-30" />
+        <div className="absolute top-1/3 right-1/3 w-16 h-16 border-2 border-zinc-300 rotate-45 animate-pulse-subtle opacity-25" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-1/4 left-1/2 w-14 h-14 border-2 border-zinc-400 rotate-45 animate-float opacity-30" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 right-1/4 w-10 h-10 border-2 border-zinc-300 rotate-45 animate-pulse-subtle opacity-25" style={{ animationDelay: '1.5s' }} />
+        
+        {/* Accent colored squares */}
+        <div className="absolute top-40 right-40 w-6 h-6 bg-emerald-500 rotate-45 animate-glow" style={{ animationDelay: '0.5s' }} />
+        <div className="absolute bottom-40 left-40 w-8 h-8 bg-blue-500 rotate-45 animate-pulse-subtle opacity-30" style={{ animationDelay: '1.8s' }} />
+        <div className="absolute top-1/4 right-1/2 w-5 h-5 bg-red-500 rotate-45 animate-glow" style={{ animationDelay: '2.5s' }} />
+        
+        {/* STRATA-style blinking red data squares */}
+        <div className="absolute top-20 left-1/3 w-4 h-4 rotate-45 animate-blink-red" style={{ animationDelay: '0s' }} />
+        <div className="absolute bottom-32 right-1/3 w-4 h-4 rotate-45 animate-blink-red" style={{ animationDelay: '0.6s' }} />
+        <div className="absolute top-2/3 left-1/4 w-3 h-3 rotate-45 animate-blink-red" style={{ animationDelay: '1.2s' }} />
+        <div className="absolute bottom-1/3 right-1/2 w-4 h-4 rotate-45 animate-blink-red" style={{ animationDelay: '1.8s' }} />
+        <div className="absolute top-1/2 left-2/3 w-3 h-3 rotate-45 animate-blink-red" style={{ animationDelay: '0.4s' }} />
+        <div className="absolute bottom-20 left-1/2 w-4 h-4 rotate-45 animate-blink-red" style={{ animationDelay: '1.4s' }} />
+        
+        {/* Additional scattered elements */}
+        <div className="absolute top-16 right-20 w-10 h-10 border border-zinc-300 rotate-45 animate-float opacity-20" style={{ animationDelay: '0.8s' }} />
+        <div className="absolute bottom-16 left-20 w-12 h-12 border border-zinc-300 rotate-45 animate-pulse-subtle opacity-20" style={{ animationDelay: '2.2s' }} />
+      </div>
+
       {/* Navigation */}
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl">
         <div className="glass flex items-center justify-between p-3">
