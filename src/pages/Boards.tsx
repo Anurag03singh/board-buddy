@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -37,7 +37,8 @@ const BOARD_COLORS = [
 ];
 
 export default function Boards() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [boards, setBoards] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -48,6 +49,12 @@ export default function Boards() {
   const [page, setPage] = useState(0);
   const ITEMS_PER_PAGE = 9;
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [user, authLoading, navigate]);
 
   const fetchBoards = async () => {
     const { data, error } = await supabase.rpc("get_accessible_boards");

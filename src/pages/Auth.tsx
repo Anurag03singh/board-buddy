@@ -27,7 +27,11 @@ export default function Auth() {
           password,
         });
         if (error) throw error;
-        navigate("/");
+        toast({
+          title: "Success!",
+          description: "Logged in successfully",
+        });
+        navigate("/boards");
       } else {
         const { error } = await supabase.auth.signUp({
           email,

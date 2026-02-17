@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -28,8 +28,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function BoardView() {
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const { id: boardId } = useParams<{ id: string }>();
-  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [user, authLoading, navigate]);
+
   const [board, setBoard] = useState<any>(null);
   const [lists, setLists] = useState<any[]>([]);
   const [tasks, setTasks] = useState<any[]>([]);
