@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search, Layers, LogOut, Grid3x3 } from "lucide-react";
+import { Plus, Search, Layers, LogOut, Grid3x3, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Notifications from "@/components/Notifications";
 import {
@@ -14,6 +14,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -154,27 +162,42 @@ export default function Boards() {
             </span>
           </div>
 
-          {/* Center Info */}
-          <div className="hidden md:flex items-center gap-4 font-mono text-[10px] text-zinc-500 uppercase tracking-widest">
-            <span className="flex items-center gap-1.5">
-              <span className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse-subtle" />
-              ACTIVE
-            </span>
-            <span className="text-zinc-300">|</span>
-            <span>{user?.email}</span>
-          </div>
+          {/* Center - Empty for cleaner look */}
+          <div className="flex-1" />
 
           {/* Actions */}
           <div className="flex items-center gap-2">
             <Notifications />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={signOut}
-              className="hover:bg-zinc-200"
-            >
-              <LogOut className="h-4 w-4" />
-            </Button>
+            
+            {/* Profile Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hover:bg-zinc-200"
+                >
+                  <User className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="font-mono text-[10px] uppercase text-zinc-500">
+                  Account
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem disabled className="font-mono text-xs">
+                  {user?.email}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={signOut}
+                  className="text-red-600 focus:text-red-600 cursor-pointer"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </nav>
