@@ -50,13 +50,10 @@ export default function Boards() {
   const { toast } = useToast();
 
   const fetchBoards = async () => {
-    // Use RPC function to get boards (includes member access)
     const { data, error } = await supabase.rpc("get_accessible_boards");
     
     if (!error && data) {
       setBoards(data);
-    } else if (error) {
-      console.error("Error fetching boards:", error);
     }
     setLoading(false);
   };
@@ -83,8 +80,6 @@ export default function Boards() {
       });
       return;
     }
-
-    console.log("Creating board:", { title: newTitle, owner_id: user.id });
     
     const { data, error } = await supabase.from("boards").insert({
       title: newTitle.trim(),
@@ -94,14 +89,12 @@ export default function Boards() {
     }).select();
     
     if (error) {
-      console.error("Board creation error:", error);
       toast({
         title: "Error Creating Board",
         description: error.message,
         variant: "destructive",
       });
     } else {
-      console.log("Board created successfully:", data);
       toast({
         title: "Success!",
         description: `Board "${newTitle}" created successfully`,
