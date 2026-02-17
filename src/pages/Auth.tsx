@@ -69,37 +69,37 @@ export default function Auth() {
       </div>
 
       {/* Animated Isometric Grid Squares */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Large animated squares with borders */}
-        <div className="absolute top-1/4 left-1/4 w-16 h-16 border-2 border-zinc-400 animate-float opacity-30" style={{ animationDelay: '0s' }} />
-        <div className="absolute top-1/3 right-1/4 w-12 h-12 border-2 border-zinc-400 animate-pulse-subtle opacity-40" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-1/4 left-1/3 w-20 h-20 border-2 border-zinc-300 animate-float opacity-25" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 right-1/3 w-14 h-14 border-2 border-zinc-400 animate-pulse-subtle opacity-35" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute bottom-1/3 right-1/4 w-18 h-18 border-2 border-zinc-300 animate-float opacity-30" style={{ animationDelay: '0.5s' }} />
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Large animated squares with borders - pointer-events-none */}
+        <div className="absolute top-1/4 left-1/4 w-16 h-16 border-2 border-zinc-400 animate-float opacity-30 pointer-events-none" style={{ animationDelay: '0s' }} />
+        <div className="absolute top-1/3 right-1/4 w-12 h-12 border-2 border-zinc-400 animate-pulse-subtle opacity-40 pointer-events-none" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-1/4 left-1/3 w-20 h-20 border-2 border-zinc-300 animate-float opacity-25 pointer-events-none" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 right-1/3 w-14 h-14 border-2 border-zinc-400 animate-pulse-subtle opacity-35 pointer-events-none" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute bottom-1/3 right-1/4 w-18 h-18 border-2 border-zinc-300 animate-float opacity-30 pointer-events-none" style={{ animationDelay: '0.5s' }} />
         
-        {/* Filled squares with colors */}
-        <div className="absolute top-20 left-20 w-8 h-8 bg-zinc-400 animate-pulse-subtle opacity-20 rotate-45" style={{ animationDelay: '0.3s' }} />
-        <div className="absolute bottom-32 right-32 w-10 h-10 bg-zinc-400 animate-float opacity-25 rotate-45" style={{ animationDelay: '1.2s' }} />
-        <div className="absolute top-40 right-40 w-6 h-6 bg-emerald-500 animate-glow rotate-45" style={{ animationDelay: '2s' }} />
-        <div className="absolute bottom-40 left-40 w-7 h-7 bg-blue-500 animate-pulse-subtle opacity-30 rotate-45" style={{ animationDelay: '1.8s' }} />
-        <div className="absolute top-60 left-60 w-5 h-5 bg-red-500 animate-glow rotate-45" style={{ animationDelay: '0.8s' }} />
+        {/* Filled squares with colors - pointer-events-none */}
+        <div className="absolute top-20 left-20 w-8 h-8 bg-zinc-400 animate-pulse-subtle opacity-20 rotate-45 pointer-events-none" style={{ animationDelay: '0.3s' }} />
+        <div className="absolute bottom-32 right-32 w-10 h-10 bg-zinc-400 animate-float opacity-25 rotate-45 pointer-events-none" style={{ animationDelay: '1.2s' }} />
+        <div className="absolute top-40 right-40 w-6 h-6 bg-emerald-500 animate-glow rotate-45 pointer-events-none" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-40 left-40 w-7 h-7 bg-blue-500 animate-pulse-subtle opacity-30 rotate-45 pointer-events-none" style={{ animationDelay: '1.8s' }} />
+        <div className="absolute top-60 left-60 w-5 h-5 bg-red-500 animate-glow rotate-45 pointer-events-none" style={{ animationDelay: '0.8s' }} />
         
-        {/* STRATA-style blinking red data squares */}
-        <div className="absolute top-1/4 right-1/2 w-4 h-4 rotate-45 animate-blink-red" style={{ animationDelay: '0s' }} />
-        <div className="absolute bottom-1/4 left-1/2 w-4 h-4 rotate-45 animate-blink-red" style={{ animationDelay: '0.7s' }} />
-        <div className="absolute top-3/4 right-1/4 w-4 h-4 rotate-45 animate-blink-red" style={{ animationDelay: '1.4s' }} />
-        <div className="absolute top-1/3 left-1/4 w-3 h-3 rotate-45 animate-blink-red" style={{ animationDelay: '0.3s' }} />
-        <div className="absolute bottom-1/3 right-1/3 w-3 h-3 rotate-45 animate-blink-red" style={{ animationDelay: '1.1s' }} />
-        <div className="absolute top-2/3 left-2/3 w-4 h-4 rotate-45 animate-blink-red" style={{ animationDelay: '1.8s' }} />
+        {/* STRATA-style blinking red data squares - HOVERABLE */}
+        <div className="absolute top-1/4 right-1/2 w-4 h-4 rotate-45 animate-blink-red cursor-pointer transition-all duration-300 hover:scale-150 hover:opacity-100 hover:shadow-[0_0_30px_rgba(239,68,68,0.8)]" style={{ animationDelay: '0s' }} />
+        <div className="absolute bottom-1/4 left-1/2 w-4 h-4 rotate-45 animate-blink-red cursor-pointer transition-all duration-300 hover:scale-150 hover:opacity-100 hover:shadow-[0_0_30px_rgba(239,68,68,0.8)]" style={{ animationDelay: '0.7s' }} />
+        <div className="absolute top-3/4 right-1/4 w-4 h-4 rotate-45 animate-blink-red cursor-pointer transition-all duration-300 hover:scale-150 hover:opacity-100 hover:shadow-[0_0_30px_rgba(239,68,68,0.8)]" style={{ animationDelay: '1.4s' }} />
+        <div className="absolute top-1/3 left-1/4 w-3 h-3 rotate-45 animate-blink-red cursor-pointer transition-all duration-300 hover:scale-150 hover:opacity-100 hover:shadow-[0_0_30px_rgba(239,68,68,0.8)]" style={{ animationDelay: '0.3s' }} />
+        <div className="absolute bottom-1/3 right-1/3 w-3 h-3 rotate-45 animate-blink-red cursor-pointer transition-all duration-300 hover:scale-150 hover:opacity-100 hover:shadow-[0_0_30px_rgba(239,68,68,0.8)]" style={{ animationDelay: '1.1s' }} />
+        <div className="absolute top-2/3 left-2/3 w-4 h-4 rotate-45 animate-blink-red cursor-pointer transition-all duration-300 hover:scale-150 hover:opacity-100 hover:shadow-[0_0_30px_rgba(239,68,68,0.8)]" style={{ animationDelay: '1.8s' }} />
         
-        {/* Small pulsing data points */}
-        <div className="absolute top-1/4 right-1/2 w-3 h-3 bg-emerald-500 animate-pulse-subtle opacity-50 rotate-45" style={{ animationDelay: '0.2s' }} />
-        <div className="absolute bottom-1/4 left-1/2 w-3 h-3 bg-blue-500 animate-pulse-subtle opacity-50 rotate-45" style={{ animationDelay: '1.4s' }} />
-        <div className="absolute top-3/4 right-1/4 w-4 h-4 bg-red-500 animate-pulse-subtle opacity-40 rotate-45" style={{ animationDelay: '2.2s' }} />
+        {/* Small pulsing data points - pointer-events-none */}
+        <div className="absolute top-1/4 right-1/2 w-3 h-3 bg-emerald-500 animate-pulse-subtle opacity-50 rotate-45 pointer-events-none" style={{ animationDelay: '0.2s' }} />
+        <div className="absolute bottom-1/4 left-1/2 w-3 h-3 bg-blue-500 animate-pulse-subtle opacity-50 rotate-45 pointer-events-none" style={{ animationDelay: '1.4s' }} />
+        <div className="absolute top-3/4 right-1/4 w-4 h-4 bg-red-500 animate-pulse-subtle opacity-40 rotate-45 pointer-events-none" style={{ animationDelay: '2.2s' }} />
         
-        {/* Additional scattered squares */}
-        <div className="absolute top-16 right-16 w-12 h-12 border border-zinc-300 animate-float opacity-20 rotate-45" style={{ animationDelay: '1.6s' }} />
-        <div className="absolute bottom-16 left-16 w-14 h-14 border border-zinc-300 animate-pulse-subtle opacity-25 rotate-45" style={{ animationDelay: '0.9s' }} />
+        {/* Additional scattered squares - pointer-events-none */}
+        <div className="absolute top-16 right-16 w-12 h-12 border border-zinc-300 animate-float opacity-20 rotate-45 pointer-events-none" style={{ animationDelay: '1.6s' }} />
+        <div className="absolute bottom-16 left-16 w-14 h-14 border border-zinc-300 animate-pulse-subtle opacity-25 rotate-45 pointer-events-none" style={{ animationDelay: '0.9s' }} />
       </div>
 
       {/* Floating Elements */}
