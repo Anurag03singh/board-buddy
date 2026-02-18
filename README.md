@@ -9,6 +9,15 @@ Email: demo@taskflow.com
 Password: demo123456
 ```
 
+**Note**: If demo credentials don't work, you need to create the demo user first. See [SETUP_DEMO_USER.md](SETUP_DEMO_USER.md) for detailed instructions.
+
+**Quick Setup**: 
+1. Go to Supabase Dashboard → Authentication → Users
+2. Click "Add User"
+3. Email: `demo@taskflow.com`, Password: `demo123456`
+4. Check "Auto Confirm User"
+5. Click "Create User"
+
 ## 📋 Table of Contents
 
 - [Features](#features)
